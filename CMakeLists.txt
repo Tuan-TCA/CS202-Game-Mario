@@ -6,6 +6,7 @@ project(ProjectCS202)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set_property(GLOBAL PROPERTY JOB_FAIL_FAST TRUE)
 
 # include(FetchContent)  # Include module FetchContent to download raylib
 # FetchContent_Declare(raylib
@@ -15,6 +16,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # FetchContent_MakeAvailable(raylib)
 
 set(RAYLIB_PATH "C:/raylib")
+
+add_compile_options(-fdiagnostics-color=always)
 
 include_directories(${RAYLIB_PATH}/include)
 link_directories(${RAYLIB_PATH}/lib)
@@ -42,3 +45,4 @@ add_custom_command(
 target_link_libraries(main raylib -lopengl32 -lgdi32 -lwinmm)
 
 target_include_directories(main PRIVATE ${PROJECT_SOURCE_DIR}/header)
+

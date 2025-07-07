@@ -2,7 +2,7 @@
 #include "Menu.hpp"
 #include "Game.hpp"
 #include "UI.hpp"
-#include "Character.hpp"
+#include "Player.hpp"
 Vector2 Program::mouseWorldPos = { 0, 0 };
 
 Program::Program()
@@ -129,7 +129,7 @@ void Program::displayCurrentScene() {
             rlRotatef(90, 1, 0, 0);
             DrawGrid(1000, 100);
             rlPopMatrix();
-            currentSceneObject->displaySceneInCamera();
+            currentSceneObject->displayScene();
             EndMode2D();
 
             // Draw the buttons that will be on every scene

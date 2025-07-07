@@ -1,7 +1,7 @@
 #pragma once
 #include "Scene.hpp"
 #include "raylib-tileson.h"
-#include "Character.hpp"
+#include "Player.hpp"
 
 class Character;
 class Button;

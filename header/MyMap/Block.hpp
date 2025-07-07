@@ -3,7 +3,7 @@
 #include "GameObject.hpp"
 #include "tileson.hpp"
 
-#include "Character.hpp"
+#include "Player.hpp"
 
 // Enum chứa loại item mà Question Block có thể chứa
 enum class Contains { None = 0, Coin, Mushroom, FireFlower, Star, OneUp };

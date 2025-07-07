@@ -1,13 +1,12 @@
 #pragma once
-#include "Character.hpp"
+#include "Player.hpp"
 #include "MyMap.hpp"
 #include "Scene.hpp"
 #include "raylib-tileson.h"
 
 class Game : public Scene {
 protected:
-
-    //Character* MarioPointer = nullptr;
+    Player* Mario;
     
     std::unordered_map<std::string, std::string> mapPaths;
     string current_Map;
@@ -16,16 +15,15 @@ public:
     
     // initialize
     Game();
-    
-    void init() override;
 
     // update
-    void updateScene() override;
-    void updateSceneInCamera(Camera2D cam) {};
+    void updateScene() override ;
 
+	virtual void updateSceneInCamera(Camera2D cam) { };
     // display
     void displayScene() override;
-    void displaySceneInCamera() override;
+	virtual void displaySceneInCamera() { };
+
     
     ~Game() = default;
 

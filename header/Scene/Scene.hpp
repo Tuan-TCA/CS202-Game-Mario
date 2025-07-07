@@ -10,8 +10,7 @@ public:
 	sceneType CurrentScene;
 	
 	// intitialize
-	virtual void init() = 0;
-	
+	virtual void init() { } ;
 	// update
 	virtual void updateScene() = 0;
 	virtual void updateSceneInCamera(Camera2D cam) = 0;

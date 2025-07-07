@@ -9,42 +9,37 @@ Game::Game()
 		{"Map1.1", "assets/Map/Map1.1.json"},
 		// Add the rest...
 	};
-    init();
-
-}
-void Game::init() {
-
     current_Map = "Map1.1";
     curMap.choose(mapPaths[current_Map]);
 
-
+    Mario = new Player({100,0}, {16,16});
+    
 }
 
 void Game::updateScene() {
-    // Mario.update();
-    // Goomba.update();
+
     curMap.update();
 
+    Mario->update();
     //Check Collision
-    //Mario with Map
-    // for(auto &x : curMap.tileBlocks) {
-    //     if(Mario.checkCollision(x)) {
-    //         cout << "Collision Mario-Blocks" << endl;
-    //         Mario.updateCollision(x);
-    //         x->updateCollision(&Mario);
-    //         break;
-    //     }
-    // }
+    // Mario with Map
+    for(auto &x : curMap.tileBlocks) {
+        if(Mario->checkCollision(x)) {
+            cout << "Collision Mario-Blocks" << endl;
+            Mario->updateCollision(x);
+            x->updateCollision(Mario);
+            break;
+        }
+    }
 
     //Block with Block
 
 
 
 }
-void Game::displaySceneInCamera() {
-    curMap.display();
-    // Mario.display();
-    // Goomba.display();
-}
 void Game::displayScene() {
+    curMap.display();
+
+    Mario->display();
+    // Goomba.display();
 }
