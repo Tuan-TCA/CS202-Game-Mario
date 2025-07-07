@@ -4,6 +4,8 @@
 #include "tileson.hpp"
 
 #include "Player.hpp"
+#include <iostream>
+using namespace std;
 
 // Enum chứa loại item mà Question Block có thể chứa
 enum class Contains { None = 0, Coin, Mushroom, FireFlower, Star, OneUp };
@@ -68,12 +70,15 @@ public:
     }
 
     void updateCollision(GameObject* other) override {
-        // Character* character = dynamic_cast<Character*>(other);
-        // if (!character) return;
+        Player* player = dynamic_cast<Player*>(other);
+        if (!player) return;
 
-        // if(other->getPosition().y > this->getFeet().y) {
-        //     cout << "Feet\n";
-        //     pos.y++;
-        // }
+        if(isSolid) {        
+            if(other->getPosition().y > this->getFeet().y) {
+                cout << "Feet\n";
+                pos.y++;
+            }
+
+        }
     }
 };
