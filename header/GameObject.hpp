@@ -42,6 +42,7 @@ public:
     virtual Rectangle getLeftSide() const { return {pos.x, pos.y, 1, size.y}; }
     virtual Rectangle getRightSide() const { return {pos.x + size.x - 1, pos.y, 1, size.y}; }
 
+    const Vector2 getCenter() { return {pos.x + size.x/2 , pos.y + size.y/2 }; }
 protected:
     //Góc trái trên của Rec
     Vector2 pos;

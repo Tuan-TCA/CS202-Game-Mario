@@ -11,13 +11,18 @@ public:
 	Scene() = default;
 	// update
 	virtual void update() = 0;
-	//virtual void updateSceneInCamera(Camera2D cam) = 0;
 
 	// display
 	virtual void display() = 0;
-	//virtual void displaySceneInCamera() = 0;
     
 	virtual ~Scene() = default;
+
+	inline Camera2D getCamera() const {
+		return cam;
+	};
+
+protected:
+	Camera2D cam;
 };
 
 class Menu : public Scene {

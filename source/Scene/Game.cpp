@@ -13,6 +13,10 @@ Game::Game()
 
     Mario = new Player({100,0}, {16,16});
     
+    cam.offset = { screenWidth/2, screenHeight/2};
+    cam.target = Mario->getCenter();
+    cam.zoom = 2.4f;
+    cam.rotation = 0;
 }
 
 Game::~Game() {
@@ -23,6 +27,8 @@ Game::~Game() {
 void Game::update() {
     curMap.update();
     Mario->update();
+    if(IsKeyPressed(KEY_A))
+    cam.target = Mario->getCenter();
 
     //Check Collision
     // Mario with Map

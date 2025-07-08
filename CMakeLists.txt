@@ -18,6 +18,7 @@ set_property(GLOBAL PROPERTY JOB_FAIL_FAST TRUE)
 set(RAYLIB_PATH "C:/raylib")
 
 add_compile_options(-fdiagnostics-color=always)
+add_compile_options(-Wfatal-errors)
 
 include_directories(${RAYLIB_PATH}/include)
 link_directories(${RAYLIB_PATH}/lib)

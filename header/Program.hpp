@@ -11,6 +11,6 @@ public:
     void changeScene(SceneMode a);
 
 private: 
-    SceneMode curScene;
+    Scene* curScene;
     vector<Scene*> scenes;
 };

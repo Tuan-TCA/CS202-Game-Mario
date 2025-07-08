@@ -10,16 +10,19 @@ Program::Program() {
     // scenes.push_back(new Scene(SceneMode::GAME));
     // Factory Method ?
 
-    scenes.push_back(new Game);
-    curScene = SceneMode::GAME;
+    curScene = new Game;
 }
 
 void Program::run() {
+
     while(!WindowShouldClose()) {
         update();
         BeginDrawing();
-            ClearBackground(WHITE);
-            display();
+            BeginMode2D(curScene->getCamera());
+
+                ClearBackground(WHITE);
+                display();
+            EndMode2D();
         EndDrawing();
     }
 
@@ -29,10 +32,10 @@ void Program::run() {
 
 
 void Program::update() {
-    scenes[0]->update();
+    curScene->update();
 }
 
 void Program::display() {
-    scenes[0]->display();
+    curScene->display();
 }
 
