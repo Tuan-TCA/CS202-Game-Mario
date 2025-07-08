@@ -1,24 +1,25 @@
 #pragma once
-#include "UI.hpp"
-typedef enum sceneType { 
-	MENU = 0,
-	GAME
-} sceneType;
+#include <unordered_map>
+#include "Global.hpp"
+#include "Player.hpp"
+#include "MyMap.hpp"
 
 class Scene {
 public:
-	sceneType CurrentScene;
-	
-	// intitialize
-	virtual void init() { } ;
+	SceneMode CurrentScene;
+
+	Scene() = default;
 	// update
-	virtual void updateScene() = 0;
-	virtual void updateSceneInCamera(Camera2D cam) = 0;
+	virtual void update() = 0;
+	//virtual void updateSceneInCamera(Camera2D cam) = 0;
 
 	// display
-	virtual void displayScene() = 0;
-	virtual void displaySceneInCamera() = 0;
+	virtual void display() = 0;
+	//virtual void displaySceneInCamera() = 0;
     
-	
 	virtual ~Scene() = default;
+};
+
+class Menu : public Scene {
+
 };

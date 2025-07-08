@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include "UI.hpp"
 #include <chrono>
 #include <thread>
 
@@ -16,13 +15,18 @@ Game::Game()
     
 }
 
-void Game::updateScene() {
+Game::~Game() {
+    delete Mario;
+    //curMap.clearAll();
+}
 
+void Game::update() {
     curMap.update();
-
     Mario->update();
+
     //Check Collision
     // Mario with Map
+    
     for(auto &x : curMap.tileBlocks) {
         if(Mario->checkCollision(x)) {
             cout << "Collision Mario-Blocks" << endl;
@@ -33,13 +37,10 @@ void Game::updateScene() {
     }
 
     //Block with Block
-
-
-
 }
-void Game::displayScene() {
-    curMap.display();
 
+void Game::display() {
+    curMap.display();
     Mario->display();
-    // Goomba.display();
+    
 }

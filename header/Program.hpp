@@ -1,38 +1,16 @@
 #pragma once
+#include "Global.hpp"
 #include "Scene.hpp"
-#include "raylib-tileson.h"
-#include "Player.hpp"
-
-class Character;
-class Button;
-
 class Program {
-private:
-    vector<Button*>SceneButtons;
-    vector<Scene*> scenes;
-    Camera2D camera = { 
-        {static_cast<float> (UI::screenWidth) / 2, static_cast<float> (UI::screenHeight) / 5},  
-        { static_cast<float> (UI::screenWidth) / 2, 0 },
-        0.0f,  
-        0.0f
-    };
-
 public:
-    Scene* currentSceneObject;
-    static Vector2 mouseWorldPos;
-    
-    // Basic methods 
     Program();
-    void updateCurrentScene();
-    void displayCurrentScene();
+    void update();
+    void display();
     void run();
 
-    ~Program();
+    void changeScene(SceneMode a);
 
-    //Scene
-    int getCurrentScene();
-    void changeScene(sceneType newScene);
-    
-    void initButtons();
-    void updateCamera();
+private: 
+    SceneMode curScene;
+    vector<Scene*> scenes;
 };
