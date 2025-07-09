@@ -2,6 +2,16 @@
 
 #include <vector>
 #include "raylib.h"
+#include <algorithm>
+using namespace std;
+
+enum CollisionType {
+    NONE,
+    HEAD,   // A HEAD B là A đứng trên B
+    FEET,   // A nhảy lên đụng B
+    LEFT,   // A ở bên trái B
+    RIGHT,  // A ở bên phải B
+};
 
 //Là một hình chữ nhật, mô tả mọi Object trong Game.
 class GameObject {
@@ -21,15 +31,29 @@ public:
     }
 
     // Kiểm tra va chạm giữa hai GameObject
-    bool checkCollision(const GameObject* other) {
-        return CheckCollisionRecs(this->getBounds(), other->getBounds());
+    int checkCollision(const GameObject* other) {
+        if(!CheckCollisionRecs(getBounds(), other->getBounds())) 
+            return NONE;
+
+        int penLeft = pos.x + size.x - other->pos.x,
+            penRight = other->pos.x + other->size.x - pos.x, //Đo độ sâu "chèn", ngược lại để dương
+            penTop = pos.y + size.y - other->pos.y,
+            penBottom = other->pos.y + other->size.y - pos.y;
+        
+        int m = min({ abs(penLeft), abs(penRight), abs(penTop), abs(penBottom) });
+
+        if(m == penLeft) return LEFT;
+        if(m == penRight) return RIGHT;
+        if(m == penTop) return HEAD;
+        if(m == penBottom) return FEET;
+        
+
+        return NONE;
     }
 
-    // Getter/Setter vị trí
     const Vector2& getPosition() const { return pos; }
     void setPosition(const Vector2& _pos) { pos = _pos; }
 
-    // Getter/Setter Size Rectangle
     const Vector2& getSize() const { return size; }
     void setSize(const Vector2& s) { size = s; }
 
@@ -37,17 +61,21 @@ public:
         return {pos.x, pos.y, size.x,size.y};
     }
 
-    virtual Rectangle getFeet() const { return {pos.x, pos.y+size.y - 1, size.x, 1}; }
-    virtual Rectangle getHead() const { return {pos.x, pos.y, size.x, 1}; }
-    virtual Rectangle getLeftSide() const { return {pos.x, pos.y, 1, size.y}; }
-    virtual Rectangle getRightSide() const { return {pos.x + size.x - 1, pos.y, 1, size.y}; }
-
     const Vector2 getCenter() { return {pos.x + size.x/2 , pos.y + size.y/2 }; }
+    int slice = 2;
+
+    virtual Rectangle getFeet() const { return {pos.x, pos.y+size.y - slice, size.x, slice}; }
+    virtual Rectangle getHead() const { return {pos.x, pos.y, size.x, slice}; }
+    virtual Rectangle getLeft() const { return {pos.x, pos.y, slice, size.y}; }
+    virtual Rectangle getRight() const { return {pos.x + size.x - slice, pos.y, slice, size.y}; }
+
+
 protected:
     //Góc trái trên của Rec
     Vector2 pos;
     //Size Rectangle
     Vector2 size;
+        
 
 };
 

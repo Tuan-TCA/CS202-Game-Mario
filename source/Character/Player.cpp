@@ -1,9 +1,9 @@
 
-// Player.cpp
 #include "Player.hpp"
-#include "Block.hpp"       // Full definition for dynamic_cast
+#include "Block.hpp"
 #include <iostream>
-// Constructors
+using namespace std;
+
 Player::Player()
     : GameObject({0,0}, {0,0})
     , velocity{0,0}
@@ -18,7 +18,7 @@ Player::Player(Vector2 _pos, Vector2 _size)
 
 // Update per frame
 void Player::update() {
-    float dt = GetFrameTime();
+    float dt = GetFrameTime(); //Thời gian vẽ 1 frame (second) (dựa theo FPS) để đảm bảo vận tốc đúng px/s với mọi FPS
     handleInput(dt);
     applyPhysics(dt);
     animate();
@@ -33,18 +33,30 @@ void Player::display() {
 void Player::updateCollision(GameObject* other) {
     if (Block* block = dynamic_cast<Block*>(other)) {
         if (block->isSolid) {
-            // Push player up until just above block head
-            // if (pos.y + size.y > block->getPosition().y) {
-            //     pos.y = block->getPosition().y - size.y;
-            //     //std::cout << "@@@@@@@@@@@\n";
-            //     velocity.y = 0;
-            //     onGround = true;
-            // }
-            // else
-            // if(pos.y > block->getPosition().y + block->getSize().y  ) {
-            //     pos.y = block->getPosition().y + block->getSize().y;
-            //     //std::cout << "##########\n";
-            // }
+            Rectangle bound = other->getBounds();
+            int test = checkCollision(other);
+            if(test == HEAD) {
+                //cout << test << endl;
+                pos.y = bound.y - size.y;
+                onGround = true;
+                velocity.y = 0;
+            }
+            if(test == FEET) {
+                cout << test << endl;
+                velocity.y = 0;
+                pos.y = bound.y + bound.height;
+            }
+            if(test == LEFT) {
+                cout << test << endl;
+                pos.x = bound.x - size.x;
+                velocity.x = 0;
+                
+            }
+            if(test == RIGHT) {
+                cout << test << endl;
+                pos.x = bound.x + bound.width;
+                velocity.x = 0;
+            }            
         }
     }
 }

@@ -39,7 +39,7 @@ void Block::update() {
 
 void Block::display() {
     if (isInvisible && !isUsed) return;
-    DrawTextureRec(texture, srcRec, getPosition(), WHITE);
+    DrawTextureRec(texture, srcRec, getPosition(), color);
 }
 
 void Block::updateCollision(GameObject* other) {
@@ -47,9 +47,6 @@ void Block::updateCollision(GameObject* other) {
     if (!player) return;
 
     if (isSolid) {
-        if (other->getPosition().y > this->getFeet().y) {
-            cout << "Feet\n";
-            pos.y += 5;
-        }
+        
     }
 }

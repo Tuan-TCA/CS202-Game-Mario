@@ -25,6 +25,8 @@ public:
     bool      isPipeEntrance = false;   //Đánh dấu nếu ống nước có đường bí mật
     bool      isFlagPole     = false;   //Đánh dấu cây cờ
 
+    Color color = WHITE;
+
     Block(int _gid, Vector2 _pos, Vector2 _size,
           Texture2D _tex, Rectangle _src);
 
