@@ -42,11 +42,24 @@ void Block::display() {
     DrawTextureRec(texture, srcRec, getPosition(), color);
 }
 
-void Block::updateCollision(GameObject* other) {
+void Block::updateCollision(GameObject* other, int type) {
     Player* player = dynamic_cast<Player*>(other);
     if (!player) return;
 
-    if (isSolid) {
-        
+    if(type == HEAD) {
+        DrawText("H", pos.x+16, pos.y, 20, RED);
+        cout << "H";
     }
+    if(type == FEET) {
+        DrawText("F", pos.x+16, pos.y, 20, RED);
+        cout << "F";
+    }
+    if(type == LEFT) {
+        DrawText("L", pos.x+16, pos.y, 20, RED);
+        cout << "L";
+    }
+    if(type == RIGHT) {
+        DrawText("R", pos.x+16, pos.y, 20, RED);
+        cout << "R";
+    }            
 }

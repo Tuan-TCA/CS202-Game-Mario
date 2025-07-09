@@ -40,5 +40,5 @@ public:
     // Vẽ block
     void display() override;
 
-    void updateCollision(GameObject* other);
+    void updateCollision(GameObject* other, int type);
 };

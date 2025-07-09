@@ -30,30 +30,28 @@ void Player::display() {
 }
 
 // Collision response
-void Player::updateCollision(GameObject* other) {
+void Player::updateCollision(GameObject* other, int type) {
     if (Block* block = dynamic_cast<Block*>(other)) {
         if (block->isSolid) {
             Rectangle bound = other->getBounds();
-            int test = checkCollision(other);
-            if(test == HEAD) {
-                //cout << test << endl;
+            if(type == HEAD) {
+                //cout << type << endl;
                 pos.y = bound.y - size.y;
                 onGround = true;
                 velocity.y = 0;
             }
-            if(test == FEET) {
-                cout << test << endl;
+            if(type == FEET && velocity.y < 0) {
+                cout << type << endl;
                 velocity.y = 0;
                 pos.y = bound.y + bound.height;
             }
-            if(test == LEFT) {
-                cout << test << endl;
+            if(type == LEFT) {
+                cout << type << endl;
                 pos.x = bound.x - size.x;
                 velocity.x = 0;
-                
             }
-            if(test == RIGHT) {
-                cout << test << endl;
+            if(type == RIGHT) {
+                cout << type << endl;
                 pos.x = bound.x + bound.width;
                 velocity.x = 0;
             }            

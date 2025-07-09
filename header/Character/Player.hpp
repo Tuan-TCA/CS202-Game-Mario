@@ -13,7 +13,7 @@ public:
     // Override lifecycle methods
     void update() override;
     void display() override;
-    void updateCollision(GameObject* other) override;
+    void updateCollision(GameObject* other, int type) override;
 
 private:
     // Physics & movement state

@@ -3,6 +3,7 @@
 #include <vector>
 #include "raylib.h"
 #include <algorithm>
+#include <cmath>
 using namespace std;
 
 enum CollisionType {
@@ -27,26 +28,35 @@ public:
     virtual void display() = 0;
 
     // Xử lý khi va chạm với một object khác
-    virtual void updateCollision(GameObject* other) {
+    virtual void updateCollision(GameObject* other, int type) {
     }
 
-    // Kiểm tra va chạm giữa hai GameObject
+    // Kiểm tra va chạm giữa hai GameObject. Return enum CollisionType là Direction
     int checkCollision(const GameObject* other) {
-        if(!CheckCollisionRecs(getBounds(), other->getBounds())) 
+        //Phải thêm epsilon chỉnh bounds vì frame Raylib không chính xác
+        const float eps = -0.6;
+        Rectangle A = getBounds();
+        A.x      -= eps;  A.y      -= eps;
+        A.width  += 2*eps; A.height += 2*eps;
+
+        Rectangle B = other->getBounds();
+        B.x      -= eps;  B.y      -= eps;
+        B.width  += 2*eps; B.height += 2*eps;
+
+        if (!CheckCollisionRecs(A, B))
             return NONE;
+            
+        float penLeft   = fabsf(A.x + A.width  - B.x),
+            penRight  = fabsf(B.x + B.width  - A.x), // Đo độ sâu "chèn", ngược lại để dương
+            penTop    = fabsf(A.y + A.height - B.y),
+            penBottom = fabsf(B.y + B.height - A.y);
 
-        int penLeft = pos.x + size.x - other->pos.x,
-            penRight = other->pos.x + other->size.x - pos.x, //Đo độ sâu "chèn", ngược lại để dương
-            penTop = pos.y + size.y - other->pos.y,
-            penBottom = other->pos.y + other->size.y - pos.y;
-        
-        int m = min({ abs(penLeft), abs(penRight), abs(penTop), abs(penBottom) });
+        float m = min({ penLeft, penRight, penTop, penBottom }); // abs hết cho lành
 
-        if(m == penLeft) return LEFT;
-        if(m == penRight) return RIGHT;
-        if(m == penTop) return HEAD;
-        if(m == penBottom) return FEET;
-        
+        if (m == penLeft)   return LEFT;
+        if (m == penRight)  return RIGHT;
+        if (m == penTop)    return HEAD;
+        if (m == penBottom) return FEET;
 
         return NONE;
     }

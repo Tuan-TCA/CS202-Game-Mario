@@ -14,8 +14,8 @@ Game::Game()
     Mario = new Player({100,0}, {16,16});
     
     cam.offset = { screenWidth/2, screenHeight/2};
-    cam.target = Mario->getCenter();
-    cam.zoom = 2.2f;
+    cam.target = { 150, 150};
+    cam.zoom = 2.1f;
     cam.rotation = 0;
 }
 
@@ -27,19 +27,20 @@ Game::~Game() {
 void Game::update() {
     curMap.update();
     Mario->update();
-    if(IsKeyDown(KEY_A))
-    cam.target = Mario->getCenter();
+    //if(IsKeyDown(KEY_A)) cam.target = Mario->getCenter();
 
     if(IsKeyDown(KEY_Q))
         cout << Mario->getPosition().x << " " << Mario->getPosition().y << endl;
 
-    //Check Collision
+    // //Check Collision
     // Mario with Map
-    
+    GameObject* M = Mario;
+
     for(auto &x : curMap.tileBlocks) {
-        if(Mario->checkCollision(x)) {
-            Mario->updateCollision(x);
-            x->updateCollision(Mario);
+        int type = M->checkCollision(x);
+        if(type) {
+            M->updateCollision(x,type);
+            x->updateCollision(M,type);
         }
     }
 
@@ -47,6 +48,7 @@ void Game::update() {
 }
 
 void Game::display() {
+
     curMap.display();
     Mario->display();
     
