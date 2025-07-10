@@ -133,7 +133,7 @@ public:
         for (auto *b : objectBlocks) drawBlock(b, ox, oy);
     }
     void update() {
-        for (auto *b : objectBlocks) b->update();
+        for (auto *b : tileBlocks) b->update();
     }
     
     Rectangle getMapBounds() {

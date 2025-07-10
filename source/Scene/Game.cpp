@@ -25,7 +25,6 @@ Game::~Game() {
 }
 
 void Game::update() {
-    curMap.update();
     Mario->update();
     //if(IsKeyDown(KEY_A)) cam.target = Mario->getCenter();
 
@@ -44,6 +43,8 @@ void Game::update() {
         }
     }
 
+    
+    curMap.update();
     //Block with Block
 }
 

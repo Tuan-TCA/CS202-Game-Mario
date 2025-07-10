@@ -41,4 +41,19 @@ public:
     void display() override;
 
     void updateCollision(GameObject* other, int type);
+
+private:
+      void handleInput(float dt);
+      void applyPhysics(float dt);
+            // Physics & movement state
+    Vector2 velocity;
+    //static constexpr float speed     = 200.0f;  // pixels per second
+    static constexpr float jumpForce = 200.0f;  // initial jump velocity
+    static constexpr float gravity   = 900.0f;  // gravity acceleration
+    static constexpr float maxHeight   = -8.0f;  
+    bool onGround = true;
+    //static constexpr int GroundY = 240;
+
+    bool isJumping = false;
+    const Vector2 prePos;
 };

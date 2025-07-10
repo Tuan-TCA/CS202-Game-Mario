@@ -10,6 +10,7 @@ Block::Block(int _gid, Vector2 _pos, Vector2 _size,
     , gid(_gid)
     , texture(_tex)
     , srcRec(_src)
+    , prePos(_pos)
 {}
 
 Block::Block(tson::Object &obj, Vector2 _pos, Vector2 _size,
@@ -18,6 +19,7 @@ Block::Block(tson::Object &obj, Vector2 _pos, Vector2 _size,
     , gid(obj.getGid())
     , texture(_tex)
     , srcRec(_src)
+    , prePos(_pos)
 {
     isSolid        = obj.get<bool>("isSolid");
     isBreakable    = obj.get<bool>("isBreakable");
@@ -34,7 +36,11 @@ Block::Block(tson::Object &obj, Vector2 _pos, Vector2 _size,
 }
 
 void Block::update() {
-    // (nothing to do)
+    if(isJumping) {
+        float dt = GetFrameTime();
+        handleInput(dt);
+        applyPhysics(dt);
+    }
 }
 
 void Block::display() {
@@ -46,20 +52,33 @@ void Block::updateCollision(GameObject* other, int type) {
     Player* player = dynamic_cast<Player*>(other);
     if (!player) return;
 
-    if(type == HEAD) {
-        DrawText("H", pos.x+16, pos.y, 20, RED);
-        cout << "H";
-    }
     if(type == FEET) {
-        DrawText("F", pos.x+16, pos.y, 20, RED);
-        cout << "F";
+        isJumping = true;
     }
-    if(type == LEFT) {
-        DrawText("L", pos.x+16, pos.y, 20, RED);
-        cout << "L";
+}
+void Block::handleInput(float dt) {
+    if (onGround && isJumping) {
+        velocity.y = -jumpForce;
+        onGround = false;
     }
-    if(type == RIGHT) {
-        DrawText("R", pos.x+16, pos.y, 20, RED);
-        cout << "R";
-    }            
+}
+
+// Apply gravity and vertical movement
+void Block::applyPhysics(float dt) {
+    velocity.y += gravity * dt;
+    pos.y += velocity.y * dt;
+
+    // Ground collision
+    if (pos.y > prePos.y) {
+        pos.y = prePos.y;
+        velocity.y = 0;
+        onGround = true;
+        isJumping = false;
+    }
+
+    if (pos.y < prePos.y + maxHeight) {
+        pos.y = prePos.y + maxHeight;
+        velocity.y = 0;
+    }
+
 }
