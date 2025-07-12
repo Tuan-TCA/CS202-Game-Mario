@@ -19,8 +19,8 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 224,
-                "y": 111
+                "x": 423,
+                "y": 111.5
             }
         },
         "muilti_tileset.json": {
@@ -45,7 +45,7 @@
         }
     },
     "frame.defaultDuration": 150,
-    "last.imagePath": "D:/Tuan/Project/Super Mario Game/assets/Map/image",
+    "last.imagePath": "D:/Tuan/Project/My Game/assets/Map/image",
     "map.height": 14,
     "map.lastUsedFormat": "json",
     "map.tileHeight": 16,

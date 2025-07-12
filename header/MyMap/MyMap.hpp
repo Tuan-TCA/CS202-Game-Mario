@@ -26,7 +26,6 @@ public:
         tsonMap = parsed.release();
         
         // 2) Cache each tileset texture + gather metadata (including margin/spacing)
-        struct TSInfo { int firstgid, columns, margin, spacing; Vector2 tileSize; };
         std::vector<TSInfo> tsinfo;
         auto baseDir = std::filesystem::path(jsonPath).parent_path();
         for (auto &ts : tsonMap->getTilesets()) {
@@ -57,7 +56,7 @@ public:
 
         // 4) Scan layers
 
-        //Lấy Thông tin của Tilez
+        //Lấy Thông tin của Tile
         auto &InforTile = tsonMap->getTileMap();
 
         for (auto &layer : tsonMap->getLayers()) {
@@ -78,8 +77,10 @@ public:
                         uint32_t gid = data[i]; if (gid == 0) continue;
                         // select tileset info by gid
                         const TSInfo* tsi = nullptr;
+
                         for (int j = tsinfo.size()-1; j >= 0; --j)
                             if (gid >= tsinfo[j].firstgid) { tsi = &tsinfo[j]; break; }
+
                         if (!tsi) continue;
 
                         int local = gid - tsi->firstgid;
@@ -90,7 +91,7 @@ public:
                             tsi->margin + row * (tsi->tileSize.y + tsi->spacing),
                             tsi->tileSize.x,
                             tsi->tileSize.y
-                        };
+                        }; //src trong sprites
                         int x = (i % mapW) * tileW;
                         int y = (i / mapW) * tileH;
                         
@@ -103,9 +104,9 @@ public:
                                 infor,
                                 { float(x), float(y) },
                                 { float(tileW), float(tileH) },
-                                tilesetCache[tsi->firstgid], src
+                                tilesetCache[tsi->firstgid], src,
+                                tsi
                             ));
-                            cout << "KEE\n";
                         }
                         else {
                             tileBlocks.push_back(new Block(
@@ -148,9 +149,9 @@ public:
 
     // Draw: Image → Tiles → Objects
     void display(int ox = 0, int oy = 0) const {
-        for (auto *b : imageBlocks)  drawBlock(b, ox, oy);
-        for (auto *b : tileBlocks)   drawBlock(b, ox, oy);
-        for (auto *b : objectBlocks) drawBlock(b, ox, oy);
+        for (auto *b : imageBlocks)  b->display();
+        for (auto *b : tileBlocks)   b->display();
+        for (auto *b : objectBlocks) b->display();
     }
     void update() {
         for (auto *b : tileBlocks) b->update();
@@ -180,8 +181,4 @@ private:
         tilesetCache.clear();
     }
 
-    static void drawBlock(const Block* b, int ox, int oy) {
-        Vector2 p = b->getPosition();
-        DrawTextureRec(b->texture, b->srcRec, { p.x + ox, p.y + oy }, WHITE);
-    }
 };

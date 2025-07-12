@@ -7,6 +7,8 @@
 #include <iostream>
 using namespace std;
 
+struct TSInfo { int firstgid, columns, margin, spacing; Vector2 tileSize; };
+
 // Enum chứa loại item mà Question Block có thể chứa
 enum class Contains { None = 0, Coin, Mushroom, FireFlower, Star, OneUp };
 
@@ -15,6 +17,11 @@ public:
       int       gid;        // Global tile ID
       Texture2D texture;    // Texture trong sprite
       Rectangle srcRec;     // Khu vực cắt trong sprite
+
+      vector<Rectangle> srcRecs; //Load srcRec
+      float duration = 0.0f;
+      float aniTimer = 0.0f;
+      int aniIndex = 0;
 
       bool      isSolid        = false;    //Có thể đi xuyên k (Mario đứng lên, va chạm)
       bool      isBreakable    = false;   //Có thể phá vỡ được (bricks, question block)
@@ -29,9 +36,10 @@ public:
 
       Block(int _gid, Vector2 _pos, Vector2 _size,
             Texture2D _tex, Rectangle _src);
+
       Block(tson::Tile* inforTile, Vector2 _pos, Vector2 _size,
-                  Texture2D _tex, Rectangle _src);
-      // Constructor tự động đọc tất cả property từ tson::Object
+                  Texture2D _tex, Rectangle _src, const TSInfo* tsi);
+
       Block(tson::Object &obj,
             Vector2 _pos, Vector2 _size,
             Texture2D _tex, Rectangle _src);
@@ -44,6 +52,8 @@ public:
       void updateCollision(GameObject* other, int type);
 
 private:
+
+      //Moving Block. Cần nghĩ cách xử lý khác cho những GameObject có Movement.
       void handleInput(float dt);
       void applyPhysics(float dt);
             // Physics & movement state

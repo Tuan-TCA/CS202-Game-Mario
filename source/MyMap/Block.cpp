@@ -36,13 +36,37 @@ Block::Block(tson::Object &obj, Vector2 _pos, Vector2 _size,
 }
 
 Block::Block(tson::Tile* inforTile, Vector2 _pos, Vector2 _size,
-             Texture2D _tex, Rectangle _src)
+             Texture2D _tex, Rectangle _src, const TSInfo* tsi)
     : GameObject(_pos, _size)
     , gid(inforTile->getGid())
     , texture(_tex)
     , srcRec(_src)
     , prePos(_pos)
 {
+    tson::Animation animation = inforTile->getAnimation();
+
+    if(animation.any()) {
+        auto frames = animation.getFrames();
+        
+        duration= frames[0].getDuration();
+        Rectangle tmpRec = srcRec;
+        cout << frames.size() << endl;
+        for(int i=0; i< frames.size(); ++i) {
+            srcRecs.push_back({
+                tmpRec.x + i*(tsi->tileSize.x + tsi->spacing),
+                tmpRec.y,
+                tmpRec.width,
+                tmpRec.height
+            });
+        }
+        // cout << tsi->tileSize.x << ' ' <<tsi->spacing << endl;
+        // cout << srcRec.x << " " << srcRec.y <<" " << srcRec.width << " " << srcRec.height << endl;
+        // for(auto x : srcRecs) {
+        //     cout << x.x << " " << x.y <<" " << x.width << " " << x.height << endl;
+        // }
+
+    }
+
     isSolid        = inforTile->get<bool>("isSolid");
     isBreakable    = inforTile->get<bool>("isBreakable");
     isQuestion     = inforTile->get<bool>("isQuestion");
@@ -67,7 +91,17 @@ void Block::update() {
 
 void Block::display() {
     if (isInvisible && !isUsed) return;
-    DrawTextureRec(texture, srcRec, getPosition(), color);
+    if(srcRecs.size() == 0) 
+        DrawTextureRec(texture, srcRec, getPosition(), color);
+    else {        
+        aniTimer += GetFrameTime()*1000; //đổi qua mili giây vì duration ms
+        if(aniTimer > duration) {
+            aniIndex = (aniIndex+1) % srcRecs.size();
+            aniTimer = 0;
+        }
+        DrawTextureRec(texture, srcRecs[aniIndex], getPosition(), color);
+        // cout << aniTimer << endl;
+    }
 }
 
 void Block::updateCollision(GameObject* other, int type) {
@@ -77,6 +111,8 @@ void Block::updateCollision(GameObject* other, int type) {
     if(isBreakable && type == FEET) {
         isJumping = true;
     }
+
+    if(isQuestion) cout <<"Question!!!";
 }
 void Block::handleInput(float dt) {
     if (onGround && isJumping) {
