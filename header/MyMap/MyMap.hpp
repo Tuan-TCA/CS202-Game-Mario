@@ -24,7 +24,7 @@ public:
         auto parsed = parser.parse(jsonPath);
         if (!parsed || parsed->getStatus() != tson::ParseStatus::OK) return;
         tsonMap = parsed.release();
-
+        
         // 2) Cache each tileset texture + gather metadata (including margin/spacing)
         struct TSInfo { int firstgid, columns, margin, spacing; Vector2 tileSize; };
         std::vector<TSInfo> tsinfo;
@@ -56,6 +56,10 @@ public:
         mapBounds = Rectangle{ 0, 0, float(mapW * tileW), float(mapH * tileH) };
 
         // 4) Scan layers
+
+        //Lấy Thông tin của Tilez
+        auto &InforTile = tsonMap->getTileMap();
+
         for (auto &layer : tsonMap->getLayers()) {
             switch (layer.getType()) {
                 case tson::LayerType::ImageLayer: {
@@ -71,7 +75,7 @@ public:
                 case tson::LayerType::TileLayer: {
                     const auto &data = layer.getData();
                     for (int i = 0; i < (int)data.size(); ++i) {
-                        int gid = data[i]; if (gid == 0) continue;
+                        uint32_t gid = data[i]; if (gid == 0) continue;
                         // select tileset info by gid
                         const TSInfo* tsi = nullptr;
                         for (int j = tsinfo.size()-1; j >= 0; --j)
@@ -89,12 +93,28 @@ public:
                         };
                         int x = (i % mapW) * tileW;
                         int y = (i / mapW) * tileH;
-                        tileBlocks.push_back(new Block(
-                            gid,
-                            { float(x), float(y) },
-                            { float(tileW), float(tileH) },
-                            tilesetCache[tsi->firstgid], src
-                        ));
+                        
+                        auto it = InforTile.find(gid);
+
+                        if(it != InforTile.end()) {
+                            tson::Tile* infor = it->second;
+                            //Lấy thông tin cho Properties
+                            tileBlocks.push_back(new Block(
+                                infor,
+                                { float(x), float(y) },
+                                { float(tileW), float(tileH) },
+                                tilesetCache[tsi->firstgid], src
+                            ));
+                            cout << "KEE\n";
+                        }
+                        else {
+                            tileBlocks.push_back(new Block(
+                                gid,
+                                { float(x), float(y) },
+                                { float(tileW), float(tileH) },
+                                tilesetCache[tsi->firstgid], src
+                            ));
+                        }
                     }
                     break;
                 }

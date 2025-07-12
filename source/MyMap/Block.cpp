@@ -35,6 +35,28 @@ Block::Block(tson::Object &obj, Vector2 _pos, Vector2 _size,
     isFlagPole     = obj.get<bool>("isFlagPole");
 }
 
+Block::Block(tson::Tile* inforTile, Vector2 _pos, Vector2 _size,
+             Texture2D _tex, Rectangle _src)
+    : GameObject(_pos, _size)
+    , gid(inforTile->getGid())
+    , texture(_tex)
+    , srcRec(_src)
+    , prePos(_pos)
+{
+    isSolid        = inforTile->get<bool>("isSolid");
+    isBreakable    = inforTile->get<bool>("isBreakable");
+    isQuestion     = inforTile->get<bool>("isQuestion");
+    isInvisible    = inforTile->get<bool>("isInvisible");
+    isUsed         = inforTile->get<bool>("isUsed");
+
+    int iv = inforTile->get<int>("containsItem");
+    contains = static_cast<Contains>(iv);
+
+    isPipeEntrance = inforTile->get<bool>("isPipeEntrance");
+    isFlagPole     = inforTile->get<bool>("isFlagPole");
+}
+
+
 void Block::update() {
     if(isJumping) {
         float dt = GetFrameTime();
@@ -52,7 +74,7 @@ void Block::updateCollision(GameObject* other, int type) {
     Player* player = dynamic_cast<Player*>(other);
     if (!player) return;
 
-    if(type == FEET) {
+    if(isBreakable && type == FEET) {
         isJumping = true;
     }
 }

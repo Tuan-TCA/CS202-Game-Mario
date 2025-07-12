@@ -26,7 +26,7 @@ Game::~Game() {
 
 void Game::update() {
     Mario->update();
-    //if(IsKeyDown(KEY_A)) cam.target = Mario->getCenter();
+    if(IsKeyDown(KEY_A)) cam.target = Mario->getCenter();
 
     if(IsKeyDown(KEY_Q))
         cout << Mario->getPosition().x << " " << Mario->getPosition().y << endl;

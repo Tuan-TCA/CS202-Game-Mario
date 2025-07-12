@@ -1,6 +1,6 @@
 @echo off
-::rmdir /s /q build
-::rmdir /s /q VSCode
+rmdir /s /q build
+rmdir /s /q VSCode
 cmake -G "Ninja" -S . -B VSCode/build
 cd VSCode/build
 cmake --build .
