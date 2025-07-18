@@ -43,7 +43,8 @@
                  "name":"isSolid",
                  "type":"bool",
                  "value":true
-                }]
+                }],
+         "type":"QuestionBlock"
         }, 
         {
          "animation":[
@@ -74,7 +75,8 @@
                  "name":"isSolid",
                  "type":"bool",
                  "value":true
-                }]
+                }],
+         "type":"BrickBlock"
         }, 
         {
          "animation":[
