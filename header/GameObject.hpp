@@ -34,7 +34,7 @@ public:
     // Kiểm tra va chạm giữa hai GameObject. Return enum CollisionType là Direction
     int checkCollision(const GameObject* other) {
         //Phải thêm epsilon chỉnh bounds vì frame Raylib không chính xác
-        const float eps = -0.6;
+        const float eps = -0.55;
         Rectangle A = getBounds();
         A.x      -= eps;  A.y      -= eps;
         A.width  += 2*eps; A.height += 2*eps;
