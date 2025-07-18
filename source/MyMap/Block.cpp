@@ -43,6 +43,10 @@ Block::Block(tson::Tile* inforTile, Vector2 _pos, Vector2 _size,
     , srcRec(_src)
     , prePos(_pos)
 {
+// trong Block::Block(...):
+    behavior = unique_ptr<IBlockBehavior>(
+    FactoryIBlockBehavior::create(inforTile->getType(), this));
+
     tson::Animation animation = inforTile->getAnimation();
 
     if(animation.any()) {
@@ -78,19 +82,27 @@ Block::Block(tson::Tile* inforTile, Vector2 _pos, Vector2 _size,
 
     isPipeEntrance = inforTile->get<bool>("isPipeEntrance");
     isFlagPole     = inforTile->get<bool>("isFlagPole");
+
+
 }
 
 
 void Block::update() {
+    float dt = GetFrameTime();
+    
+    //physics.update(dt);
+    //behavior->updateFrame(this, dt);
+
     if(isJumping) {
-        float dt = GetFrameTime();
         handleInput(dt);
         applyPhysics(dt);
     }
 }
 
 void Block::display() {
-    if (isInvisible && !isUsed) return;
+    //if (isInvisible && !isUsed) return;
+
+    //Animation Display
     if(srcRecs.size() == 0) 
         DrawTextureRec(texture, srcRec, getPosition(), color);
     else {        
@@ -102,18 +114,31 @@ void Block::display() {
         DrawTextureRec(texture, srcRecs[aniIndex], getPosition(), color);
         // cout << aniTimer << endl;
     }
+
+    //behavior->onDraw(this);
 }
 
 void Block::updateCollision(GameObject* other, int type) {
     Player* player = dynamic_cast<Player*>(other);
     if (!player) return;
 
-    if(isBreakable && type == FEET) {
-        isJumping = true;
-    }
+    behavior->reactToCollision(player, type);
+    
+    // if(isBreakable && type == FEET) {
+    //     isJumping = true;
+    // }
 
-    if(isQuestion) cout <<"Question!!!";
+    // if(isQuestion) cout <<"Question!!!";
 }
+
+
+
+
+
+
+
+
+//Physics Components
 void Block::handleInput(float dt) {
     if (onGround && isJumping) {
         velocity.y = -jumpForce;

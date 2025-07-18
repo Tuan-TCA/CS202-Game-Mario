@@ -112,13 +112,16 @@ void MyMap::handleTileLayer(const tson::Layer &layer,
     const auto &data = layer.getData();
     int tileW = tsonMap->getTileSize().x;
     int tileH = tsonMap->getTileSize().y;
+
     for (int i = 0; i < (int)data.size(); ++i) {
         uint32_t gid = data[i]; if (gid == 0) continue;
         const TSInfo* info = selectTSInfo(gid);
         if (!info) continue;
+
         Rectangle src = calcSrcRect(*info, gid);
         Vector2 pos{ float((i % mapW) * tileW), float((i / mapW) * tileH) };
         auto it = tileMap.find(gid);
+        
         if (it != tileMap.end()) {
             tileBlocks.push_back(new Block(it->second, pos, { float(tileW), float(tileH) },
                 tilesetCache[info->firstgid], src, info));

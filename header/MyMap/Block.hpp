@@ -4,7 +4,9 @@
 #include "tileson.hpp"
 
 #include "Player.hpp"
+#include "IBlockBehavior.hpp"
 #include <iostream>
+#include <memory>
 using namespace std;
 
 struct TSInfo { int firstgid, columns, margin, spacing; Vector2 tileSize; };
@@ -12,8 +14,15 @@ struct TSInfo { int firstgid, columns, margin, spacing; Vector2 tileSize; };
 // Enum chứa loại item mà Question Block có thể chứa
 enum class Contains { None = 0, Coin, Mushroom, FireFlower, Star, OneUp };
 
+
 class Block : public GameObject {
+
+      friend class BreakableBehavior;
+      friend class QuestionBehavior;
+      friend class GroundBehavior;
+
 public:
+      //Animation Components
       int       gid;        // Global tile ID
       Texture2D texture;    // Texture trong sprite
       Rectangle srcRec;     // Khu vực cắt trong sprite
@@ -23,6 +32,7 @@ public:
       float aniTimer = 0.0f;
       int aniIndex = 0;
 
+      // // Block Properties for Behavior
       bool      isSolid        = false;    //Có thể đi xuyên k (Mario đứng lên, va chạm)
       bool      isBreakable    = false;   //Có thể phá vỡ được (bricks, question block)
       bool      isQuestion     = false;   //Là ô dấu hỏi? hay ko
@@ -31,7 +41,8 @@ public:
       Contains  contains       = Contains::None;  //Trong ô question chứa những thứ gì (Coin, Mushroom, Star,..)
       bool      isPipeEntrance = false;   //Đánh dấu nếu ống nước có đường bí mật
       bool      isFlagPole     = false;   //Đánh dấu cây cờ
-
+      unique_ptr<IBlockBehavior> behavior;
+      bool needDeletion = false; // Đánh dấu để xóa block nếu cần
       Color color = WHITE;
 
       Block(int _gid, Vector2 _pos, Vector2 _size,
@@ -45,15 +56,12 @@ public:
             Texture2D _tex, Rectangle _src);
 
       void update() override;
-
-      // Vẽ block
       void display() override;
 
-      void updateCollision(GameObject* other, int type);
+      void updateCollision(GameObject* other, int type) override;
 
-private:
-
-      //Moving Block. Cần nghĩ cách xử lý khác cho những GameObject có Movement.
+protected:
+      //Physics Components
       void handleInput(float dt);
       void applyPhysics(float dt);
             // Physics & movement state
