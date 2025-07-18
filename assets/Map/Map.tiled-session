@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Map1.1.json",
+    "activeFile": "muilti_tileset.json",
     "expandedProjectPaths": [
         "."
     ],
@@ -19,8 +19,8 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 306,
-                "y": 111
+                "x": 436.5,
+                "y": 111.5
             }
         },
         "ground_tileset.json": {
@@ -67,11 +67,11 @@
     "project": "Map.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "Map1.1.json",
         "ground_tileset.json",
         "new_blocks2_items.json",
         "new_blocks1_blocks.json",
         "muilti_tileset.json",
-        "Map1.1.json",
         "question.tsj",
         "8415.tsj",
         "tileset.json"

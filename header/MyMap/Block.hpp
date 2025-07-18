@@ -41,7 +41,8 @@ public:
       Contains  contains       = Contains::None;  //Trong ô question chứa những thứ gì (Coin, Mushroom, Star,..)
       bool      isPipeEntrance = false;   //Đánh dấu nếu ống nước có đường bí mật
       bool      isFlagPole     = false;   //Đánh dấu cây cờ
-      unique_ptr<IBlockBehavior> behavior;
+      
+      shared_ptr<IBlockBehavior> behavior;
       bool needDeletion = false; // Đánh dấu để xóa block nếu cần
       Color color = WHITE;
 
@@ -57,6 +58,7 @@ public:
 
       void update() override;
       void display() override;
+
 
       void updateCollision(GameObject* other, int type) override;
 

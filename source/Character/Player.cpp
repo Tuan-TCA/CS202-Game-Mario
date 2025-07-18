@@ -1,4 +1,3 @@
-
 #include "Player.hpp"
 #include "Block.hpp"
 #include <iostream>
@@ -35,7 +34,7 @@ void Player::updateCollision(GameObject* other, int type) {
         if (block->isSolid) {
             Rectangle bound = other->getBounds();
             if(type == HEAD) {
-                //cout << type << endl;
+                cout << type << endl;
                 pos.y = bound.y - size.y;
                 onGround = true;
                 velocity.y = 0;
