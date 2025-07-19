@@ -17,7 +17,7 @@ public:
     ~MyMap();
 
     // Load JSON, cache tileset textures, then create Block* per layer
-    void choose(const std::string &jsonPath);
+    void choose(const string &jsonPath);
 
     // Draw: Image → Tiles → Objects
     void display(int ox = 0, int oy = 0) const;
@@ -26,7 +26,7 @@ public:
 
 private:
     // Parsing and setup steps
-    bool parseJson(const std::string &jsonPath);
+    bool parseJson(const string &jsonPath);
     void cacheTilesets();
     void setupMapBounds();
     void scanLayers();
@@ -34,7 +34,7 @@ private:
     // Layer handlers
     void handleImageLayer(const tson::Layer &layer);
     void handleTileLayer(const tson::Layer &layer,
-                         const std::map<uint32_t, tson::Tile*> &tileMap,
+                         const map<uint32_t, tson::Tile*> &tileMap,
                          int mapW);
     void handleObjectLayer(tson::Layer &layer);
 
@@ -45,12 +45,13 @@ private:
 
     // Data members
     tson::Map* tsonMap;
-    std::filesystem::path baseDir;
-    std::unordered_map<int, Texture2D> tilesetCache;
-    std::vector<TSInfo> tsinfo;
+    filesystem::path baseDir;
+    unordered_map<int, Texture2D> tilesetCache;
+    vector<TSInfo> tsinfo;
     Rectangle mapBounds;
-    std::vector<Block*> imageBlocks;
-    std::vector<Block*> tileBlocks;
-    std::vector<Block*> objectBlocks;
+    vector<Block*> imageBlocks;
+    vector<Block*> tileBlocks;
+    vector<Block*> objectBlocks;
+   
 };
 

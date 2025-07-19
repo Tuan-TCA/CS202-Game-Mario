@@ -1,35 +1,44 @@
 #include "IBlockBehavior.hpp"
-
-#include "GameObject.hpp"
 #include "raylib.h"
-#include "IBlockBehavior.hpp"  
 #include "Player.hpp"
 #include "Block.hpp"
-
+#include "Particle.hpp"
+#include "Game.hpp"
 
 void QuestionBehavior::reactToCollision(GameObject* p, int type) {
     Player* player = dynamic_cast<Player*>(p);
     if (!player) return;
 
     if(type == FEET) {
+        cout << "Question Block hit!" << endl;
         block->isJumping = true;
     }
 }
 
+void QuestionBehavior::updateFrame(float dt) {
+    if(block->isJumping) {
+        block->handleInput(dt);
+        block->applyPhysics(dt);
+    }
+}
 
-void BreakableBehavior::reactToCollision(GameObject* p, int type) {
+void BrickBehavior::reactToCollision(GameObject* p, int type) {
     // chỉ phản ứng khi va chạm với Player từ dưới lên
     Player* player = dynamic_cast<Player*>(p);
     if (!player) return;
-
     // FEET = đụng từ dưới
     if (type == FEET) {
-        block->isJumping = true;
         block->needDeletion = true;
-
+        Particle::spawnParticles(*block, Game::particles);
     }
 }
 
+void BrickBehavior::updateFrame(float dt) {
+
+}
+
+void BrickBehavior::onDraw(float dt) {
+}
 
 void GroundBehavior::reactToCollision(GameObject* p, int type) {
 

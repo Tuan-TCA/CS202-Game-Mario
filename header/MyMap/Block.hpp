@@ -17,7 +17,7 @@ enum class Contains { None = 0, Coin, Mushroom, FireFlower, Star, OneUp };
 
 class Block : public GameObject {
 
-      friend class BreakableBehavior;
+      friend class BrickBehavior;
       friend class QuestionBehavior;
       friend class GroundBehavior;
 
@@ -43,6 +43,7 @@ public:
       bool      isFlagPole     = false;   //Đánh dấu cây cờ
       
       shared_ptr<IBlockBehavior> behavior;
+
       bool needDeletion = false; // Đánh dấu để xóa block nếu cần
       Color color = WHITE;
 

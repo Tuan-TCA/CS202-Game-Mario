@@ -2,12 +2,16 @@
 #include "Scene.hpp"
 #include "Player.hpp"
 #include "MyMap.hpp"
-
+#include "Particle.hpp"
+#include <vector>
+using namespace std;
 class Game : public Scene {
 public:
     Game();
 	void Collision();
-    ~Game();
+	~Game();
+
+	static vector<Particle> particles;
 
 private:
 	Player* Mario;
@@ -15,6 +19,7 @@ private:
 	unordered_map<string, string> mapPaths;
     string current_Map;
     MyMap curMap;
+
 
 	void update() override;
 	void display() override;

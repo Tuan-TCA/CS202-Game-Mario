@@ -34,23 +34,23 @@ void Player::updateCollision(GameObject* other, int type) {
         if (block->isSolid) {
             Rectangle bound = other->getBounds();
             if(type == HEAD) {
-                cout << type << endl;
+                //cout << type << endl;
                 pos.y = bound.y - size.y;
                 onGround = true;
                 velocity.y = 0;
             }
             if(type == FEET && velocity.y < 0) {
-                cout << type << endl;
+                //cout << type << endl;
                 velocity.y = 0;
                 pos.y = bound.y + bound.height;
             }
             if(type == LEFT) {
-                cout << type << endl;
+                //cout << type << endl;
                 pos.x = bound.x - size.x;
                 velocity.x = 0;
             }
             if(type == RIGHT) {
-                cout << type << endl;
+                //cout << type << endl;
                 pos.x = bound.x + bound.width;
                 velocity.x = 0;
             }            

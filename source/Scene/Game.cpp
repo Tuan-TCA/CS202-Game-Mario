@@ -2,6 +2,8 @@
 #include <chrono>
 #include <thread>
 
+std::vector<Particle> Game::particles = {};    
+
 Game::Game()
 {
     mapPaths = {
@@ -35,7 +37,14 @@ void Game::update() {
     // Mario with Map
     GameObject* M = Mario;
 
-    for(auto &x : curMap.tileBlocks) {
+    for(int i = 0; i < (int)curMap.tileBlocks.size(); ++i) {
+        Block* x = curMap.tileBlocks[i];
+        if(x->needDeletion) {
+            //delete x;
+            curMap.tileBlocks.erase(curMap.tileBlocks.begin() + i);
+            --i; 
+            continue;
+        }
         int type = M->checkCollision(x);
         if(type) {
             M->updateCollision(x,type);
@@ -45,12 +54,17 @@ void Game::update() {
 
     
     curMap.update();
+    for(auto &x : particles)
+        x.update();
     //Block with Block
 }
 
 void Game::display() {
-
+    float dt = GetFrameTime();
     curMap.display();
     Mario->display();
-    
+    for(auto &x : particles)
+    {
+        x.display(dt);
+    }
 }

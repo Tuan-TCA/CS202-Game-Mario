@@ -82,15 +82,15 @@ void MyMap::scanLayers() {
     int mapW = tsonMap->getSize().x;
     for (auto &layer : tsonMap->getLayers()) {
         switch (layer.getType()) {
-            // case tson::LayerType::ImageLayer:
-            //     handleImageLayer(layer);
-            //     break;
+            case tson::LayerType::ImageLayer:
+                handleImageLayer(layer);
+                break;
             case tson::LayerType::TileLayer:
                 handleTileLayer(layer, tileMap, mapW);
                 break;
-            // case tson::LayerType::ObjectGroup:
-            //     handleObjectLayer(layer);
-            //     break;
+            case tson::LayerType::ObjectGroup:
+                handleObjectLayer(layer);
+                break;
             default:
                 break;
         }
