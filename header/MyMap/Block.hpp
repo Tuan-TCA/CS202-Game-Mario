@@ -63,7 +63,9 @@ public:
 
       void updateCollision(GameObject* other, int type) override;
 
-      
+      inline Vector2 getVelocity() const override {
+            return velocity;
+      }
 
 protected:
       //Physics Components

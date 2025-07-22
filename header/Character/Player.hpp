@@ -15,10 +15,14 @@ public:
     void display() override;
     void updateCollision(GameObject* other, int type) override;
 
+    inline Vector2 getVelocity() const override {
+        return velocity;
+    }
+
 private:
     // Physics & movement state
     Vector2 velocity;
-    static constexpr float speed     = 200.0f;  // pixels per second
+    static constexpr float speed     = 100.0f;  // pixels per second
     static constexpr float jumpForce = 350.0f;  // initial jump velocity
     static constexpr float gravity   = 900.0f;  // gravity acceleration
     bool onGround;

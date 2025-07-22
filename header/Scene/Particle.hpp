@@ -38,16 +38,15 @@ public:
 
     // Kiểm tra còn sống hay không
     inline bool active() const { return isActive; }
-
+    
 private:
     Texture2D texture;                        // chung sprite sheet
     Rectangle srcRec;                         // phần sprite của particle
-    Movement  move;                           // giữ velocity, gravity, age, lifetime...
     bool      isActive = false;               // tắt khi hết lifetime
     float age;
     float maxLifetime;
 
     float rotationAngle = 0.0f;               // góc hiện tại (độ)
-    float angularSpeed = 180.0f;   
+    float angularSpeed = 270.0f;   
 
 };

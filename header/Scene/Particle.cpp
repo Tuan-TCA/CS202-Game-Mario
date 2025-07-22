@@ -7,10 +7,10 @@ void Particle::spawnParticles(const Block& block, std::vector<Particle>& particl
 
     // 4 vận tốc cố định: giống New SMB
     static const Vector2 initVel[4] = {
-        { -150.0f, -250.0f },   // top-left bay mạnh lên
-        {  150.0f, -250.0f },   // top-right bay mạnh lên
+        { -150.0f, -230.0f },   // top-left bay mạnh lên
+        {  120.0f, -220.0f },   // top-right bay mạnh lên
         { -150.0f, -150.0f },   // bot-left bay lên thấp hơn
-        {  150.0f, -150.0f }    // bot-right bay lên thấp hơn
+        {  100.0f, -100.0f }    // bot-right bay lên thấp hơn
     };
 
     // load texture 1 lần (không trong vòng for)
@@ -32,7 +32,7 @@ void Particle::spawnParticles(const Block& block, std::vector<Particle>& particl
 
 void Particle::display(float dt) {
     if (!isActive) return;
-    DrawTexturePro(texture, srcRec, {pos.x, pos.y, 12,12}, {6, 6}, rotationAngle, WHITE);
+    DrawTexturePro(texture, srcRec, {pos.x, pos.y, 10,10}, {6, 6}, rotationAngle, WHITE);
 }
 
 void Particle::update() {

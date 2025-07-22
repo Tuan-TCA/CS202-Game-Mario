@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include <algorithm>
 #include <cmath>
+#include "Movement.hpp"
 using namespace std;
 
 enum CollisionType {
@@ -14,6 +15,9 @@ enum CollisionType {
     RIGHT,  // A ở bên phải B
 };
 
+inline float Distance(Vector2 a, Vector2 b) {
+    return sqrt((a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y));
+};
 //Là một hình chữ nhật, mô tả mọi Object trong Game.
 class GameObject {
 public:
@@ -32,10 +36,14 @@ public:
     virtual void updateCollision(GameObject* other, int type) {
     }
 
+    virtual Vector2 getVelocity() const {
+        return move.velocity;
+    }
     // Kiểm tra va chạm giữa hai GameObject. Return enum CollisionType là Direction
     int checkCollision(const GameObject* other) {
         //Phải thêm epsilon chỉnh bounds vì frame Raylib không chính xác
-        const float epsX = -0, epsY = -0;
+        const float epsX = -0.55f, epsY = -0.55f;
+
         Rectangle A = getBounds();
         A.x      -= epsX;  A.y      -= epsY;
         A.width  += 2*epsX; A.height += 2*epsY;
@@ -44,7 +52,8 @@ public:
         B.x      -= epsX;  B.y      -= epsY;
         B.width  += 2*epsX; B.height += 2*epsY;
 
-        if (!CheckCollisionRecs(A, B))
+
+        if (!CheckCollisionRecs(A, B) || (Distance(getCenter(), other->getCenter()) - 16*sqrt(2)) > 0.05f)
             return NONE;
             
         float penLeft   = fabsf(A.x + A.width  - B.x),
@@ -52,15 +61,32 @@ public:
             penTop    = fabsf(A.y + A.height - B.y),
             penBottom = fabsf(B.y + B.height - A.y);
 
-        float m = min({ penLeft, penRight, penTop, penBottom }); // abs hết cho lành
+        vector<float> tmp;
+        tmp.push_back(INT_MAX);
+        tmp.push_back(penTop);
+        tmp.push_back(penBottom);
+        tmp.push_back(penLeft);
+        tmp.push_back(penRight);
+        
+        Vector2 velo = getVelocity();
+        if(velo.y < 0 && (Distance(getCenter(), other->getCenter()) - 16) > 0.05f)
+            return NONE;
+        if(velo.y < 0) tmp[1] = INT_MAX;
+        if(velo.y > 0) tmp[2] = INT_MAX;
+        
+        if(velo.x == 0) tmp[3] = tmp[4] = INT_MAX;
+        if(velo.y == 0) tmp[1] = tmp[2] = INT_MAX;
 
-        if (m == penLeft)   return LEFT;
-        if (m == penRight)  return RIGHT;
-        if (m == penTop)    return HEAD;
-        if (m == penBottom) return FEET;
+        
+        float m = INT_MAX;
+        for(auto &x : tmp) m = min(m,x);
 
+        for(int i = 0; i < tmp.size(); i++)
+            if(m == tmp[i]) return i;
+        
         return NONE;
     }
+
 
     const Vector2& getPosition() const { return pos; }
     void setPosition(const Vector2& _pos) { pos = _pos; }
@@ -71,8 +97,7 @@ public:
     virtual Rectangle getBounds() const {
         return {pos.x, pos.y, size.x,size.y};
     }
-
-    const Vector2 getCenter() { return {pos.x + size.x/2 , pos.y + size.y/2 }; }
+    Vector2 getCenter() const { return {pos.x + size.x/2 , pos.y + size.y/2 }; }
     int slice = 2;
 
     virtual Rectangle getFeet() const { return {pos.x, pos.y+size.y - slice, size.x, slice}; }
@@ -86,6 +111,8 @@ protected:
     Vector2 pos;
     //Size Rectangle
     Vector2 size;
+
+    Movement move;
         
 };
 
