@@ -47,9 +47,6 @@ Block::Block(tson::Tile* inforTile, Vector2 _pos, Vector2 _size,
     FactoryIBlockBehavior::create(inforTile->getType(), this));
     if(!behavior) 
         throw std::runtime_error("Unknown block type: " + inforTile->getType());
-    else 
-        cout << "Block type: " << inforTile->getType() << endl;
-        
     tson::Animation animation = inforTile->getAnimation();
 
     

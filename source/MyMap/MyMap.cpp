@@ -133,13 +133,15 @@ void MyMap::handleTileLayer(const tson::Layer &layer,
 }
 
 void MyMap::handleObjectLayer(tson::Layer &layer) {
-    for (auto &obj : layer.getObjects()) {
-        int gid = obj.getGid(); if (gid == 0) continue;
-        const TSInfo* info = selectTSInfo(gid); if (!info) continue;
-        Rectangle src = calcSrcRect(*info, gid);
-        Vector2 pos{ obj.getPosition().x, obj.getPosition().y - info->tileSize.y };
-        objectBlocks.push_back(new Block(obj, pos, info->tileSize,
-            tilesetCache[info->firstgid], src));
+    auto lists = layer.getObjects();
+
+
+    for(auto &x : lists) {
+        if(x.getName() == "StartingPoint") 
+            { StartingPoint = {(float) x.getPosition().x, (float) x.getPosition().y}; }
+
+        if(x.getName() == "FinishingPoint") 
+            { FinishingPoint = {(float) x.getPosition().x, (float) x.getPosition().y}; }
     }
 }
 

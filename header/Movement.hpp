@@ -27,6 +27,6 @@ public:
     float maxSpeed; // Maximum speed limit
     float friction; // Friction to apply when no input is 
 
-    float GroundY = 24000; // Ground level Y 
+    float GroundY = 300; // Ground level Y 
 
 };

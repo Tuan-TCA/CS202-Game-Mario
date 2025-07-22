@@ -1,7 +1,6 @@
 #include "Particle.hpp"
 #include "Block.hpp"
 void Particle::spawnParticles(const Block& block, std::vector<Particle>& particles) {
-    // chia srcRec thành 4 miếng
     float w2 = block.srcRec.width*0.5f;
     float h2 = block.srcRec.height*0.5f;
 
@@ -35,9 +34,10 @@ void Particle::display(float dt) {
     if (!isActive) return;
     DrawTexturePro(texture, srcRec, {pos.x, pos.y, 12,12}, {6, 6}, rotationAngle, WHITE);
 }
-    void Particle::update() {
+
+void Particle::update() {
     float dt = GetFrameTime();
-    move.update(pos, dt);                  // Movement sẽ cập nhật pos và age
+    move.update(pos, dt);          
     if (age >= maxLifetime) {
         isActive = false;
     }

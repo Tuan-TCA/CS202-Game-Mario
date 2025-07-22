@@ -23,10 +23,10 @@ void QuestionBehavior::updateFrame(float dt) {
 }
 
 void BrickBehavior::reactToCollision(GameObject* p, int type) {
-    // chỉ phản ứng khi va chạm với Player từ dưới lên
+
     Player* player = dynamic_cast<Player*>(p);
     if (!player) return;
-    // FEET = đụng từ dưới
+
     if (type == FEET) {
         block->needDeletion = true;
         Particle::spawnParticles(*block, Game::particles);

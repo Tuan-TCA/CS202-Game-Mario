@@ -20,7 +20,7 @@ private:
     string current_Map;
     MyMap curMap;
 
-
+	float prePosX = 0;
 	void update() override;
 	void display() override;
 };

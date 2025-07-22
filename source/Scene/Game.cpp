@@ -13,11 +13,14 @@ Game::Game()
     current_Map = "Map1.1";
     curMap.choose(mapPaths[current_Map]);
 
-    Mario = new Player({100,0}, {16,16});
+    cout << curMap.StartingPoint.x << " " << curMap.StartingPoint.y << endl;
+
+    Mario = new Player{{curMap.StartingPoint}, {16,16}};
+    prePosX = Mario->getPosition().x;
     
-    cam.offset = { screenWidth/2, screenHeight/2};
-    cam.target = { 150, 150};
-    cam.zoom = 2.1f;
+    cam.offset = { 0 , 0};
+    cam.target = {0, 0};
+    cam.zoom = (float) screenHeight / WorldHeight;
     cam.rotation = 0;
 }
 
@@ -28,10 +31,23 @@ Game::~Game() {
 
 void Game::update() {
     Mario->update();
-    if(IsKeyDown(KEY_A)) cam.target = Mario->getCenter();
+    //UpdateCamera 
+    // cout << GetWorldToScreen2D(Mario->getPosition(), cam).x << " " << GetWorldToScreen2D(Mario->getPosition(), cam).y << endl;
+    // if(GetWorldToScreen2D(Mario->getPosition(), cam).x > 400.f)
+
+    float delta = Mario->getPosition().x - prePosX;
+    if(GetWorldToScreen2D(Mario->getPosition(),cam).x > 0.8*screenWidth)
+        cam.target.x += (delta > 1) ? delta : 0;
+    if(GetWorldToScreen2D(Mario->getPosition(),cam).x < 0.2*screenWidth)
+        cam.target.x += (delta < -1) ? delta : 0;
+
 
     if(IsKeyDown(KEY_Q))
         cout << Mario->getPosition().x << " " << Mario->getPosition().y << endl;
+    
+        
+        if(IsKeyDown(KEY_A))
+            cam.target = Mario->getPosition();
 
     // //Check Collision
     // Mario with Map
@@ -57,6 +73,8 @@ void Game::update() {
     for(auto &x : particles)
         x.update();
     //Block with Block
+
+    prePosX = Mario->getPosition().x;
 }
 
 void Game::display() {
