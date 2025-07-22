@@ -1,4 +1,3 @@
-
 #include "Player.hpp"
 #include "Block.hpp"
 #include <iostream>
@@ -41,17 +40,17 @@ void Player::updateCollision(GameObject* other, int type) {
                 velocity.y = 0;
             }
             if(type == FEET && velocity.y < 0) {
-                cout << type << endl;
+                //cout << type << endl;
                 velocity.y = 0;
                 pos.y = bound.y + bound.height;
             }
             if(type == LEFT) {
-                cout << type << endl;
+                //cout << type << endl;
                 pos.x = bound.x - size.x;
                 velocity.x = 0;
             }
             if(type == RIGHT) {
-                cout << type << endl;
+                //cout << type << endl;
                 pos.x = bound.x + bound.width;
                 velocity.x = 0;
             }            

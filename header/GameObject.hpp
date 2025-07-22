@@ -17,15 +17,16 @@ enum CollisionType {
 //Là một hình chữ nhật, mô tả mọi Object trong Game.
 class GameObject {
 public:
+    friend class Movement;
     GameObject() = default;
     GameObject(const Vector2& _position, const Vector2& size)
         : pos(_position), size(size) {}
 
     virtual ~GameObject() = default;
 
-    virtual void update() = 0;
+    virtual void update() { };
 
-    virtual void display() = 0;
+    virtual void display() {};
 
     // Xử lý khi va chạm với một object khác
     virtual void updateCollision(GameObject* other, int type) {
@@ -34,14 +35,14 @@ public:
     // Kiểm tra va chạm giữa hai GameObject. Return enum CollisionType là Direction
     int checkCollision(const GameObject* other) {
         //Phải thêm epsilon chỉnh bounds vì frame Raylib không chính xác
-        const float eps = -0.55;
+        const float epsX = -0, epsY = -0;
         Rectangle A = getBounds();
-        A.x      -= eps;  A.y      -= eps;
-        A.width  += 2*eps; A.height += 2*eps;
+        A.x      -= epsX;  A.y      -= epsY;
+        A.width  += 2*epsX; A.height += 2*epsY;
 
         Rectangle B = other->getBounds();
-        B.x      -= eps;  B.y      -= eps;
-        B.width  += 2*eps; B.height += 2*eps;
+        B.x      -= epsX;  B.y      -= epsY;
+        B.width  += 2*epsX; B.height += 2*epsY;
 
         if (!CheckCollisionRecs(A, B))
             return NONE;
@@ -86,7 +87,5 @@ protected:
     //Size Rectangle
     Vector2 size;
         
-
 };
-
 

@@ -17,7 +17,7 @@ enum class Contains { None = 0, Coin, Mushroom, FireFlower, Star, OneUp };
 
 class Block : public GameObject {
 
-      friend class BreakableBehavior;
+      friend class BrickBehavior;
       friend class QuestionBehavior;
       friend class GroundBehavior;
 
@@ -41,7 +41,9 @@ public:
       Contains  contains       = Contains::None;  //Trong ô question chứa những thứ gì (Coin, Mushroom, Star,..)
       bool      isPipeEntrance = false;   //Đánh dấu nếu ống nước có đường bí mật
       bool      isFlagPole     = false;   //Đánh dấu cây cờ
-      unique_ptr<IBlockBehavior> behavior;
+      
+      shared_ptr<IBlockBehavior> behavior;
+
       bool needDeletion = false; // Đánh dấu để xóa block nếu cần
       Color color = WHITE;
 
@@ -58,7 +60,10 @@ public:
       void update() override;
       void display() override;
 
+
       void updateCollision(GameObject* other, int type) override;
+
+      
 
 protected:
       //Physics Components

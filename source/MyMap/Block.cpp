@@ -1,4 +1,3 @@
-// Block.cpp
 #include "Block.hpp"
 #include "Player.hpp"
 #include <iostream>
@@ -44,17 +43,18 @@ Block::Block(tson::Tile* inforTile, Vector2 _pos, Vector2 _size,
     , prePos(_pos)
 {
 // trong Block::Block(...):
-    behavior = unique_ptr<IBlockBehavior>(
+    behavior = shared_ptr<IBlockBehavior>(
     FactoryIBlockBehavior::create(inforTile->getType(), this));
-
+    if(!behavior) 
+        throw std::runtime_error("Unknown block type: " + inforTile->getType());
     tson::Animation animation = inforTile->getAnimation();
 
+    
     if(animation.any()) {
         auto frames = animation.getFrames();
         
         duration= frames[0].getDuration();
         Rectangle tmpRec = srcRec;
-        cout << frames.size() << endl;
         for(int i=0; i< frames.size(); ++i) {
             srcRecs.push_back({
                 tmpRec.x + i*(tsi->tileSize.x + tsi->spacing),
@@ -83,24 +83,20 @@ Block::Block(tson::Tile* inforTile, Vector2 _pos, Vector2 _size,
     isPipeEntrance = inforTile->get<bool>("isPipeEntrance");
     isFlagPole     = inforTile->get<bool>("isFlagPole");
 
-
 }
 
 
 void Block::update() {
     float dt = GetFrameTime();
-    
+    behavior->updateFrame(dt);
     //physics.update(dt);
-    //behavior->updateFrame(this, dt);
 
-    if(isJumping) {
-        handleInput(dt);
-        applyPhysics(dt);
-    }
 }
 
 void Block::display() {
     //if (isInvisible && !isUsed) return;
+
+    float dt = GetFrameTime();
 
     //Animation Display
     if(srcRecs.size() == 0) 
@@ -115,24 +111,15 @@ void Block::display() {
         // cout << aniTimer << endl;
     }
 
-    //behavior->onDraw(this);
+    //behavior->onDraw(dt);
 }
+
 
 void Block::updateCollision(GameObject* other, int type) {
     Player* player = dynamic_cast<Player*>(other);
     if (!player) return;
-
     behavior->reactToCollision(player, type);
-    
-    // if(isBreakable && type == FEET) {
-    //     isJumping = true;
-    // }
-
-    // if(isQuestion) cout <<"Question!!!";
 }
-
-
-
 
 
 
